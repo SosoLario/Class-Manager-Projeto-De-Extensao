@@ -108,9 +108,27 @@ function ensureEnrollment(PDO $db, int $student, int $class, float $fee, string 
 $adminId = ensureUser($db,'Administrador Demonstrativo',$adminEmail,'administrador',$adminPassword);
 $secretaryId = ensureUser($db,'Secretaria Demonstrativa','secretaria@classmanager.test','secretaria',$demoPassword);
 $professorUserId = ensureUser($db,'Professor Demonstrativo','professor@classmanager.test','professor',$demoPassword);
+$adminSecondaryId = ensureUser($db,'Administrador de Demonstração 2','admin2@classmanager.test','administrador',$demoPassword);
+$secretarySecondaryId = ensureUser($db,'Secretaria de Demonstração 2','secretaria2@classmanager.test','secretaria',$demoPassword);
 $teacherA = ensureTeacher($db,'Marina Andrade','marina@classmanager.test','11900001001','Inglês, Espanhol');
 $teacherB = ensureTeacher($db,'Rafael Nunes','rafael@classmanager.test','11900001002','Inglês, Francês',$professorUserId);
 $teacherC = ensureTeacher($db,'Luiza Campos','luiza@classmanager.test','11900001003','Espanhol, Francês');
+
+$teacherAccounts = [
+    [$teacherA,'professora1@classmanager.test','Marina Andrade'],
+    [$teacherB,'professor@classmanager.test','Rafael Nunes'],
+    [$teacherC,'professora3@classmanager.test','Luiza Campos'],
+];
+$linkTeacher = $db->prepare('UPDATE professores SET usuario_id=:user WHERE id=:teacher AND (usuario_id IS NULL OR usuario_id=:same_user)');
+foreach ($teacherAccounts as [$teacherId,$teacherEmail,$teacherName]) {
+    $userId = ensureUser($db,$teacherName,$teacherEmail,'professor',$demoPassword);
+    $linkTeacher->execute(['user'=>$userId,'same_user'=>$userId,'teacher'=>$teacherId]);
+    if ($linkTeacher->rowCount() === 0) {
+        $linked = $db->prepare('SELECT usuario_id FROM professores WHERE id=:id');
+        $linked->execute(['id'=>$teacherId]);
+        if ((int)$linked->fetchColumn() !== $userId) throw new RuntimeException('O cadastro do professor já está vinculado a outra conta.');
+    }
+}
 
 $courseA = ensureCourse($db,'Inglês Intermediário','Inglês','intermediário',12,96,320.00);
 $courseB = ensureCourse($db,'Espanhol Básico','Espanhol','básico',10,80,280.00);
@@ -125,14 +143,15 @@ foreach ($studentNames as $index => $name) {
     $guardian = $index === 0 ? ['Responsável Demonstrativo','11900002001','responsavel1@example.test'] : ($index === 3 ? ['Responsável Fictício','11900002002','responsavel2@example.test'] : null);
     $studentIds[] = ensureStudent($db,$name,'aluno'.($index+1).'@example.test','1190000'.str_pad((string) ($index+100),4,'0',STR_PAD_LEFT),date('Y-m-d'),$guardian);
 }
-$studentDemoUserId = ensureUser($db,'Aluno Demonstrativo','aluno1@example.test','aluno',$demoPassword);
 $linkStudentUser = $db->prepare('UPDATE alunos SET usuario_id=:user WHERE id=:student AND (usuario_id IS NULL OR usuario_id=:same_user)');
-$linkStudentUser->execute(['user'=>$studentDemoUserId,'student'=>$studentIds[0],'same_user'=>$studentDemoUserId]);
-if ($linkStudentUser->rowCount() === 0) {
-    $studentLink = $db->prepare('SELECT usuario_id FROM alunos WHERE id=:id');
-    $studentLink->execute(['id'=>$studentIds[0]]);
-    if ((int) $studentLink->fetchColumn() !== $studentDemoUserId) {
-        throw new RuntimeException('A conta demonstrativa já está vinculada a outro aluno.');
+foreach ($studentIds as $index => $studentId) {
+    $studentNumber=$index+1;$studentEmail='aluno'.$studentNumber.'@example.test';
+    $studentUserId=ensureUser($db,$studentNames[$index],$studentEmail,'aluno',$demoPassword);
+    $linkStudentUser->execute(['user'=>$studentUserId,'same_user'=>$studentUserId,'student'=>$studentId]);
+    if ($linkStudentUser->rowCount() === 0) {
+        $studentLink = $db->prepare('SELECT usuario_id FROM alunos WHERE id=:id');
+        $studentLink->execute(['id'=>$studentId]);
+        if ((int)$studentLink->fetchColumn() !== $studentUserId) throw new RuntimeException('O cadastro do aluno já está vinculado a outra conta.');
     }
 }
 
@@ -203,5 +222,7 @@ if ($findAnnouncement->fetchColumn() === false) {
 }
 
 echo "Dados fictícios criados ou preservados sem duplicação.\n";
-echo "Contas: {$adminEmail}, secretaria@classmanager.test, professor@classmanager.test, aluno1@example.test\n";
-echo "As senhas ficam no .env: SEED_ADMIN_PASSWORD e SEED_DEMO_PASSWORD.\n";
+echo "Administradores: {$adminEmail} (SEED_ADMIN_PASSWORD), admin2@classmanager.test (SEED_DEMO_PASSWORD).\n";
+echo "Secretaria: secretaria@classmanager.test e secretaria2@classmanager.test (SEED_DEMO_PASSWORD).\n";
+echo "Professores: professora1@classmanager.test, professor@classmanager.test, professora3@classmanager.test (SEED_DEMO_PASSWORD).\n";
+echo "Alunos: aluno1@example.test até aluno12@example.test (SEED_DEMO_PASSWORD).\n";

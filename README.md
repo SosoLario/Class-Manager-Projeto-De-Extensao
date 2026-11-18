@@ -59,7 +59,7 @@ backend/
    C:\xampp\php\php.exe -S localhost:8000
    ```
 
-7. Abra `http://localhost:8000/frontend/login.html`. A conta administradora usa `SEED_ADMIN_EMAIL` e `SEED_ADMIN_PASSWORD`. Secretaria (`secretaria@classmanager.test`), professor (`professor@classmanager.test`) e aluno (`aluno1@example.test`) usam `SEED_DEMO_PASSWORD`. O login encaminha cada perfil para sua área e as permissões são verificadas no backend.
+7. Abra `http://localhost:8000/frontend/login.html`. A conta principal de administrador usa `SEED_ADMIN_EMAIL` e `SEED_ADMIN_PASSWORD`. As demais contas usam `SEED_DEMO_PASSWORD`: administrador `admin2@classmanager.test`; secretaria `secretaria@classmanager.test` e `secretaria2@classmanager.test`; professores `professora1@classmanager.test`, `professor@classmanager.test` e `professora3@classmanager.test`; alunos `aluno1@example.test` até `aluno12@example.test`. Cada perfil é encaminhado à sua área e as permissões são verificadas no backend.
 
 Se o MySQL do XAMPP não iniciar por conflito na porta 3306, outro serviço MySQL pode estar ocupando essa porta. `.env` é ignorado pelo Git: nunca envie esse arquivo ou uma senha ao repositório.
 
