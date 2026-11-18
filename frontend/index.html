@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Painel demonstrativo do ClassManager.">
+  <title>Painel | ClassManager</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="app-body">
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <a class="sidebar-brand" href="index.html" aria-label="ClassManager, página inicial">
+        <span class="brand-mark">CM</span><span>Class<span class="brand-light">Manager</span></span>
+      </a>
+      <div class="sidebar-label">MENU PRINCIPAL</div>
+      <nav class="side-nav" aria-label="Navegação principal">
+        <a class="side-link active" href="index.html" aria-current="page"><i data-lucide="layout-dashboard"></i><span>Dashboard</span></a>
+        <a class="side-link" href="pages/alunos.html"><i data-lucide="users"></i><span>Alunos</span></a>
+        <a class="side-link" href="pages/manager.html?module=teachers"><i data-lucide="contact-round"></i><span>Professores</span></a>
+        <a class="side-link" href="pages/manager.html?module=courses"><i data-lucide="book-open"></i><span>Cursos</span></a>
+        <a class="side-link" href="pages/manager.html?module=classes"><i data-lucide="notebook-tabs"></i><span>Turmas</span></a>
+        <a class="side-link" href="pages/manager.html?module=enrollments"><i data-lucide="clipboard-check"></i><span>Matrículas</span></a>
+        <a class="side-link" href="pages/manager.html?module=lessons"><i data-lucide="calendar-check"></i><span>Aulas e frequência</span></a>
+        <a class="side-link" href="pages/academico.html"><i data-lucide="calendar-days"></i><span>Calendário, notas e avisos</span></a>
+        <a class="side-link" href="pages/manager.html?module=invoices"><i data-lucide="wallet"></i><span>Financeiro</span></a>
+        <a class="side-link admin-only" href="pages/manager.html?module=users"><i data-lucide="shield-check"></i><span>Usuários e permissões</span></a>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="demo-badge"><span class="demo-dot"></span> Ambiente demonstrativo</div>
+        <button class="side-link side-button" id="logoutButton" type="button"><i data-lucide="log-out"></i><span>Sair</span></button>
+      </div>
+    </aside>
+
+    <main class="main-area" id="dashboard">
+      <header class="topbar">
+        <button class="icon-button menu-toggle" id="menuToggle" aria-label="Abrir menu" aria-expanded="false"><i data-lucide="menu"></i></button>
+        <div class="breadcrumb-label">Visão geral <span>/</span> <strong>Dashboard</strong></div>
+        <div class="topbar-right">
+          <span class="today-label" id="todayLabel"></span>
+          <button class="profile-button" type="button" aria-label="Usuário conectado">
+            <span class="avatar">CM</span><span class="profile-copy"><strong data-current-user-name>Conta</strong><small data-current-user-role></small></span><i data-lucide="chevron-down"></i>
+          </button>
+        </div>
+      </header>
+
+      <div class="page-content">
+        <div class="page-heading">
+          <div><p class="eyebrow mb-2">TERÇA-FEIRA • VISÃO GERAL</p><h1>Olá, administrador <span aria-hidden="true">✦</span></h1><p class="heading-subtitle">Acompanhe o resumo da sua escola de idiomas.</p></div>
+          <span class="sample-label"><i data-lucide="info"></i> Dados fictícios de demonstração</span>
+        </div>
+
+        <section class="stats-grid" aria-label="Indicadores da escola">
+          <article class="stat-card"><div class="stat-top"><span>Alunos ativos</span><span class="stat-icon blue"><i data-lucide="users"></i></span></div><div class="stat-value" id="statStudents">—</div><div class="stat-foot"><span class="stat-foot-strong">No cadastro</span></div></article>
+          <article class="stat-card"><div class="stat-top"><span>Professores</span><span class="stat-icon violet"><i data-lucide="contact-round"></i></span></div><div class="stat-value" id="statTeachers">—</div><div class="stat-foot"><span class="stat-foot-strong">Ativos</span><span>na equipe</span></div></article>
+          <article class="stat-card"><div class="stat-top"><span>Turmas em andamento</span><span class="stat-icon cyan"><i data-lucide="notebook-tabs"></i></span></div><div class="stat-value" id="statClasses">—</div><div class="stat-foot"><span class="stat-foot-strong">Ativas</span></div></article>
+          <article class="stat-card"><div class="stat-top"><span>Matrículas ativas</span><span class="stat-icon amber"><i data-lucide="clipboard-check"></i></span></div><div class="stat-value" id="statEnrollments">—</div><div class="stat-foot"><span class="stat-foot-strong">Em andamento</span></div></article>
+        </section>
+
+        <section class="content-grid">
+          <article class="panel revenue-panel">
+            <div class="panel-heading"><div><h2>Visão financeira</h2><p>Receitas recebidas ao longo do ano</p></div><label class="select-wrap"><span class="visually-hidden">Período do gráfico</span><select id="chartPeriod" aria-label="Período do gráfico"><option value="year">Este ano</option><option value="semester">Últimos 6 meses</option></select><i data-lucide="chevron-down"></i></label></div>
+            <div class="revenue-summary"><strong id="revenueTotal">R$ 42.680</strong><span class="trend positive"><i data-lucide="trending-up"></i> 12,8%</span><small>em relação ao período anterior</small></div>
+            <div class="chart-wrap"><canvas id="revenueChart" aria-label="Gráfico de receitas mensais" role="img"></canvas></div>
+          </article>
+          <article class="panel classes-panel">
+            <div class="panel-heading"><div><h2>Próximas aulas</h2><p>Agenda de hoje</p></div><a class="text-action" href="pages/manager.html?module=lessons">Ver aulas <i data-lucide="arrow-up-right"></i></a></div>
+            <div class="class-list" id="upcomingLessons">
+              <div class="class-row"><div class="class-time">09:00<small>10:30</small></div><div class="class-color color-blue"></div><div class="class-info"><strong>Inglês • Intermediário</strong><span>Turma IN-204 · Sala 02</span><small>Prof.ª Mariana Costa</small></div><span class="class-count"><i data-lucide="users"></i> 12</span></div>
+              <div class="class-row"><div class="class-time">10:45<small>12:15</small></div><div class="class-color color-violet"></div><div class="class-info"><strong>Espanhol • Básico</strong><span>Turma ES-101 · Sala 01</span><small>Prof. Carlos Mendes</small></div><span class="class-count"><i data-lucide="users"></i> 9</span></div>
+              <div class="class-row"><div class="class-time">14:00<small>15:30</small></div><div class="class-color color-cyan"></div><div class="class-info"><strong>Francês • Básico</strong><span>Turma FR-103 · Sala 03</span><small>Prof.ª Ana Ribeiro</small></div><span class="class-count"><i data-lucide="users"></i> 8</span></div>
+              <div class="class-row"><div class="class-time">16:00<small>17:30</small></div><div class="class-color color-amber"></div><div class="class-info"><strong>Inglês • Avançado</strong><span>Turma IN-305 · Sala 02</span><small>Prof. João Ferreira</small></div><span class="class-count"><i data-lucide="users"></i> 10</span></div>
+            </div>
+          </article>
+        </section>
+
+        <section class="bottom-grid">
+          <article class="panel finance-panel"><div class="panel-heading"><div><h2>Resumo financeiro</h2><p>Mensalidades deste mês</p></div><span class="month-chip" id="currentMonth"></span></div><div class="finance-items"><div class="finance-item"><span class="finance-icon paid"><i data-lucide="circle-check"></i></span><span><strong>Recebidas</strong><small>Pagamentos confirmados</small></span><b id="financeReceived">—</b></div><div class="finance-item"><span class="finance-icon pending"><i data-lucide="clock-3"></i></span><span><strong>Pendentes</strong><small>Aguardando pagamento</small></span><b id="financePending">—</b></div><div class="finance-item"><span class="finance-icon overdue"><i data-lucide="triangle-alert"></i></span><span><strong>Atrasadas</strong><small>Vencimento ultrapassado</small></span><b id="financeOverdue">—</b></div></div></article>
+          <article class="panel activity-panel"><div class="panel-heading"><div><h2>Atividades recentes</h2><p>Últimas atualizações</p></div><button class="icon-button" aria-label="Mais opções"><i data-lucide="ellipsis"></i></button></div><div class="activity-list" id="recentActivity"><p class="text-secondary small">Carregando atividades…</p></div></article>
+        </section>
+        <footer class="page-footer">ClassManager <span>•</span> Projeto acadêmico demonstrativo <span>•</span> Todos os dados são fictícios</footer>
+      </div>
+    </main>
+  </div>
+  <div class="sidebar-scrim" id="sidebarScrim"></div>
+  <div class="toast-message" id="toastMessage" role="status" aria-live="polite"></div>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="js/api.js"></script>
+  <script src="js/dashboard.js"></script>
+</body>
+</html>

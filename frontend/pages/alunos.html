@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Cadastro e consulta de alunos do ClassManager.">
+  <title>Alunos | ClassManager</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="../css/styles.css?v=4">
+</head>
+<body class="app-body">
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <a class="sidebar-brand" href="../index.html"><span class="brand-mark">CM</span><span>Class<span class="brand-light">Manager</span></span></a>
+      <div class="sidebar-label">MENU PRINCIPAL</div>
+      <nav class="side-nav" aria-label="Navegação principal">
+        <a class="side-link" href="../index.html"><i data-lucide="layout-dashboard"></i><span>Dashboard</span></a>
+        <a class="side-link active" href="alunos.html" aria-current="page"><i data-lucide="users"></i><span>Alunos</span></a>
+        <a class="side-link" href="manager.html?module=teachers"><i data-lucide="contact-round"></i><span>Professores</span></a>
+        <a class="side-link" href="manager.html?module=courses"><i data-lucide="book-open"></i><span>Cursos</span></a>
+        <a class="side-link" href="manager.html?module=classes"><i data-lucide="notebook-tabs"></i><span>Turmas</span></a>
+        <a class="side-link" href="manager.html?module=enrollments"><i data-lucide="clipboard-check"></i><span>Matrículas</span></a>
+        <a class="side-link" href="manager.html?module=lessons"><i data-lucide="calendar-check"></i><span>Aulas e frequência</span></a>
+        <a class="side-link" href="academico.html"><i data-lucide="calendar-days"></i><span>Calendário, notas e avisos</span></a>
+        <a class="side-link" href="manager.html?module=invoices"><i data-lucide="wallet"></i><span>Financeiro</span></a>
+        <a class="side-link admin-only" href="manager.html?module=users"><i data-lucide="shield-check"></i><span>Usuários e permissões</span></a>
+      </nav>
+      <div class="sidebar-bottom"><div class="demo-badge"><span class="demo-dot"></span> Ambiente demonstrativo</div><button class="side-link side-button" id="logoutButton" type="button"><i data-lucide="log-out"></i><span>Sair</span></button></div>
+    </aside>
+    <main class="main-area">
+      <header class="topbar"><button class="icon-button menu-toggle" id="menuToggle" aria-label="Abrir menu" aria-expanded="false"><i data-lucide="menu"></i></button><div class="breadcrumb-label">Cadastros <span>/</span> <strong>Alunos</strong></div><div class="topbar-right"><span class="today-label" id="todayLabel"></span><div class="profile-button"><span class="avatar">CM</span><span class="profile-copy"><strong data-current-user-name>Conta</strong><small data-current-user-role></small></span></div></div></header>
+      <div class="page-content">
+        <div class="page-heading student-heading"><div><p class="eyebrow mb-2">GESTÃO ACADÊMICA</p><h1>Alunos</h1><p class="heading-subtitle">Cadastre e acompanhe os alunos da escola.</p></div><button class="primary-button" id="newStudent"><i data-lucide="plus"></i> Novo aluno</button></div>
+        <div class="student-summary"><div class="summary-number"><strong id="studentCount">—</strong><span>alunos encontrados</span></div><span class="sample-label"><i data-lucide="database"></i> Persistência MySQL local</span></div>
+        <section class="panel students-panel">
+          <div class="student-toolbar"><label class="search-box"><i data-lucide="search"></i><input id="searchInput" type="search" placeholder="Buscar por nome, telefone ou e-mail" autocomplete="off"></label><label class="filter-box"><span>Situação</span><select id="statusFilter"><option value="">Todas</option><option value="ativo">Ativo</option><option value="inativo">Inativo</option><option value="trancado">Trancado</option></select><i data-lucide="chevron-down"></i></label></div>
+          <div id="tableMessage" class="table-message" role="status">Carregando alunos…</div>
+          <div class="table-responsive"><table class="students-table"><thead><tr><th>ALUNO</th><th>CONTATO</th><th>DATA DE MATRÍCULA</th><th>SITUAÇÃO</th><th class="text-end">AÇÕES</th></tr></thead><tbody id="studentsTableBody"></tbody></table></div>
+        </section>
+        <footer class="page-footer">ClassManager <span>•</span> Projeto acadêmico demonstrativo <span>•</span> Dados fictícios</footer>
+      </div>
+    </main>
+  </div>
+  <div class="sidebar-scrim" id="sidebarScrim"></div>
+  <div class="toast-message" id="toastMessage" role="status" aria-live="polite"></div>
+
+  <div class="modal fade" id="studentModal" tabindex="-1" aria-labelledby="studentModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable"><div class="modal-content student-modal">
+      <div class="modal-header"><div><p class="eyebrow mb-1">GESTÃO ACADÊMICA</p><h2 class="modal-title" id="studentModalTitle">Novo aluno</h2></div><div class="modal-header-actions"><button type="submit" form="studentForm" class="primary-button" id="saveStudent"><i data-lucide="check"></i> Salvar aluno</button><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button></div></div>
+      <form id="studentForm" novalidate><div class="modal-body"><div class="form-section-title">Dados do aluno</div><div class="form-grid">
+        <label class="form-field span-2"><span>Nome completo <b>*</b></span><input name="nome_completo" maxlength="160" required placeholder="Ex.: Beatriz Oliveira"><small class="field-error"></small></label>
+        <label class="form-field"><span>CPF</span><input name="cpf" inputmode="numeric" maxlength="14" placeholder="000.000.000-00"><small class="field-error"></small></label>
+        <label class="form-field"><span>Data de nascimento</span><input name="data_nascimento" type="date"><small class="field-error"></small></label>
+        <label class="form-field"><span>Telefone</span><input name="telefone" type="tel" maxlength="30" placeholder="(00) 00000-0000"><small class="field-error"></small></label>
+        <label class="form-field"><span>E-mail</span><input name="email" type="email" maxlength="190" placeholder="aluno@exemplo.com"><small class="field-error"></small></label>
+        <label class="form-field span-2"><span>Endereço</span><input name="endereco" maxlength="255" placeholder="Rua, número, bairro e cidade"><small class="field-error"></small></label>
+        <label class="form-field"><span>Data de matrícula <b>*</b></span><input name="data_matricula" type="date" required><small class="field-error"></small></label>
+        <label class="form-field"><span>Situação</span><select name="situacao"><option value="ativo">Ativo</option><option value="inativo">Inativo</option><option value="trancado">Trancado</option></select><small class="field-error"></small></label>
+      </div><div class="form-section-title responsible-title">Responsável legal <span>opcional</span></div><div class="form-grid">
+        <label class="form-field span-2"><span>Nome completo do responsável</span><input name="responsavel_nome" maxlength="160" placeholder="Para alunos menores de idade"></label>
+        <label class="form-field"><span>Telefone do responsável</span><input name="responsavel_telefone" maxlength="30" type="tel" placeholder="(00) 00000-0000"></label>
+        <label class="form-field"><span>E-mail do responsável</span><input name="responsavel_email" maxlength="190" type="email" placeholder="responsavel@exemplo.com"></label>
+      </div><p class="required-note"><b>*</b> Campos obrigatórios</p></div>
+      <div class="modal-footer"><button type="button" class="secondary-button" data-bs-dismiss="modal">Cancelar</button></div></form>
+    </div></div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="../js/api.js"></script>
+  <script src="../js/students.js"></script>
+</body>
+</html>

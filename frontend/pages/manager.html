@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Gestão acadêmica do ClassManager.">
+  <title>Gestão | ClassManager</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="../css/styles.css?v=6">
+</head>
+<body class="app-body">
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <a class="sidebar-brand" href="../index.html"><span class="brand-mark">CM</span><span>Class<span class="brand-light">Manager</span></span></a>
+      <div class="sidebar-label">MENU PRINCIPAL</div>
+      <nav class="side-nav" aria-label="Navegação principal">
+        <a class="side-link" href="../index.html"><i data-lucide="layout-dashboard"></i><span>Dashboard</span></a>
+        <a class="side-link" href="alunos.html"><i data-lucide="users"></i><span>Alunos</span></a>
+        <a class="side-link" href="manager.html?module=teachers"><i data-lucide="contact-round"></i><span>Professores</span></a>
+        <a class="side-link" href="manager.html?module=courses"><i data-lucide="book-open"></i><span>Cursos</span></a>
+        <a class="side-link" href="manager.html?module=classes"><i data-lucide="notebook-tabs"></i><span>Turmas</span></a>
+        <a class="side-link" href="manager.html?module=enrollments"><i data-lucide="clipboard-check"></i><span>Matrículas</span></a>
+        <a class="side-link" href="manager.html?module=lessons"><i data-lucide="calendar-check"></i><span>Aulas e frequência</span></a>
+        <a class="side-link" href="academico.html"><i data-lucide="calendar-days"></i><span>Calendário, notas e avisos</span></a>
+        <a class="side-link" href="manager.html?module=invoices"><i data-lucide="wallet"></i><span>Financeiro</span></a>
+        <a class="side-link admin-only" href="manager.html?module=users"><i data-lucide="shield-check"></i><span>Usuários e permissões</span></a>
+      </nav>
+      <div class="sidebar-bottom"><div class="demo-badge"><span class="demo-dot"></span> Ambiente demonstrativo</div><button class="side-link side-button" id="logoutButton" type="button"><i data-lucide="log-out"></i><span>Sair</span></button></div>
+    </aside>
+    <main class="main-area">
+      <header class="topbar"><button class="icon-button menu-toggle" id="menuToggle" aria-label="Abrir menu" aria-expanded="false"><i data-lucide="menu"></i></button><div class="breadcrumb-label">Gestão <span>/</span> <strong id="breadcrumbTitle">Módulo</strong></div><div class="topbar-right"><span class="today-label" id="todayLabel"></span><div class="profile-button"><span class="avatar">CM</span><span class="profile-copy"><strong data-current-user-name>Conta</strong><small data-current-user-role></small></span></div></div></header>
+      <div class="page-content">
+        <div class="page-heading student-heading"><div><p class="eyebrow mb-2" id="moduleEyebrow">GESTÃO ESCOLAR</p><h1 id="moduleTitle">Módulo</h1><p class="heading-subtitle" id="moduleDescription"></p></div><button class="primary-button" id="newRecord"><i data-lucide="plus"></i> Novo registro</button></div>
+        <div class="module-tabs" id="moduleTabs"></div>
+        <div class="student-summary"><div class="summary-number"><strong id="recordCount">—</strong><span id="recordCountLabel">registros</span></div><span class="sample-label"><i data-lucide="database"></i> Dados do banco local</span></div>
+        <section class="panel students-panel">
+          <div class="student-toolbar"><label class="search-box"><i data-lucide="search"></i><input id="searchInput" type="search" placeholder="Buscar registros" autocomplete="off"></label><label class="filter-box" id="statusFilterWrap"><span>Situação</span><select id="statusFilter"><option value="">Todas</option></select><i data-lucide="chevron-down"></i></label></div>
+          <div id="tableMessage" class="table-message" role="status">Carregando registros…</div>
+          <div class="table-responsive"><table class="students-table"><thead id="tableHead"></thead><tbody id="tableBody"></tbody></table></div>
+        </section>
+        <footer class="page-footer">ClassManager <span>•</span> Projeto acadêmico demonstrativo <span>•</span> Dados fictícios</footer>
+      </div>
+    </main>
+  </div>
+  <div class="sidebar-scrim" id="sidebarScrim"></div>
+  <div class="toast-message" id="toastMessage" role="status" aria-live="polite"></div>
+  <div class="modal fade" id="recordModal" tabindex="-1" aria-labelledby="recordModalTitle" aria-hidden="true"><div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable"><div class="modal-content student-modal">
+    <div class="modal-header"><div><p class="eyebrow mb-1">GESTÃO ESCOLAR</p><h2 class="modal-title" id="recordModalTitle">Novo registro</h2></div><div class="modal-header-actions"><button type="submit" form="recordForm" class="primary-button" id="saveRecord"><i data-lucide="check"></i> Salvar</button><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button></div></div>
+    <form id="recordForm"><div class="modal-body"><div class="form-grid" id="recordFields"></div><p class="required-note"><b>*</b> Campos obrigatórios</p></div><div class="modal-footer"><button type="button" class="secondary-button" data-bs-dismiss="modal">Cancelar</button></div></form>
+  </div></div></div>
+  <div class="modal fade" id="attendanceModal" tabindex="-1" aria-labelledby="attendanceTitle" aria-hidden="true"><div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable"><div class="modal-content student-modal"><div class="modal-header"><div><p class="eyebrow mb-1">AULAS E FREQUÊNCIA</p><h2 class="modal-title" id="attendanceTitle">Registrar frequência</h2></div><div class="modal-header-actions"><button type="submit" form="attendanceForm" class="primary-button"><i data-lucide="check"></i> Salvar frequência</button><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button></div></div><form id="attendanceForm"><div class="modal-body"><div id="attendanceRows"></div></div><div class="modal-footer"><button type="button" class="secondary-button" data-bs-dismiss="modal">Fechar</button></div></form></div></div></div>
+  <div class="modal fade" id="transferModal" tabindex="-1" aria-labelledby="transferTitle" aria-hidden="true"><div class="modal-dialog modal-dialog-centered"><div class="modal-content student-modal"><div class="modal-header"><div><p class="eyebrow mb-1">GESTÃO ACADÊMICA</p><h2 class="modal-title" id="transferTitle">Transferir matrícula</h2></div><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button></div><form id="transferForm"><div class="modal-body"><label class="form-field"><span>Turma de destino <b>*</b></span><select name="turma_id" required><option value="">Carregando turmas…</option></select></label><label class="form-field mt-3"><span>Data da transferência <b>*</b></span><input name="data_matricula" type="date" required></label><p class="text-secondary small mt-3 mb-0">A matrícula atual será marcada como transferida e uma nova matrícula será criada, preservando o histórico.</p></div><div class="modal-footer"><button type="button" class="secondary-button" data-bs-dismiss="modal">Cancelar</button><button type="submit" class="primary-button">Confirmar transferência</button></div></form></div></div></div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script><script src="https://unpkg.com/lucide@latest"></script><script src="../js/api.js"></script><script src="../js/manager.js"></script>
+</body>
+</html>

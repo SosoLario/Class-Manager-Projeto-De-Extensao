@@ -1,0 +1,12 @@
+.env
+.env.*
+!.env.example
+/backend/vendor/
+/backend/.phpunit.cache/
+/backend/storage/sessions/
+/.vscode/
+/.idea/
+*.log
+/xampp-windows-x64-8.4.27-0-VS17-installer.exe
+.DS_Store
+Thumbs.db
